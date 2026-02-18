@@ -4,7 +4,8 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "18"
+  # Use Node 20 to satisfy react-router engine and recent npm optional-deps fixes.
+  NODE_VERSION = "20"
   NPM_CONFIG_OPTIONAL = "true"
   NPM_FLAGS = "--include=optional"
   # Force rollup to fall back to the WASM build if the native binary is missing.
