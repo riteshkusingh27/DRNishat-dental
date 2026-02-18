@@ -1,11 +1,15 @@
-```toml
 [build]
+  # Install dependencies (including optional native binaries) and run the build
   command = "npm ci --include=optional && npm run build"
   publish = "dist"
 
 [build.environment]
+  # Use Node 20 for compatibility with Vite 6 / Rollup 4 / React Router
   NODE_VERSION = "20"
+
+  # Ensure optional dependencies (native binaries) are installed
   NPM_CONFIG_OPTIONAL = "true"
   NPM_FLAGS = "--include=optional"
+
+  # Force Rollup to skip native bindings if missing and use JS/WASM fallback
   ROLLUP_SKIP_NODE_JS_NATIVE_LIBS = "true"
-```
