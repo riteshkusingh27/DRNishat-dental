@@ -1,5 +1,5 @@
 import { Search, User } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { patients } from '../../data/mockData';
 import logo from '../../../assets/lg.png';
 
@@ -10,19 +10,33 @@ interface HeaderProps {
 export function Header({ onPatientSelect }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showResults, setShowResults] = useState(false);
+  const [dateStr, setDateStr] = useState('');
+  const [timeStr, setTimeStr] = useState('');
 
-  // Get current date and time
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-IN', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
-  });
-  const timeStr = now.toLocaleTimeString('en-IN', { 
-    hour: '2-digit', 
-    minute: '2-digit' 
-  });
+  // Keep the clock in the header live instead of frozen at initial render
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date();
+      setDateStr(
+        now.toLocaleDateString('en-IN', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      );
+      setTimeStr(
+        now.toLocaleTimeString('en-IN', {
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      );
+    };
+
+    updateClock();
+    const id = setInterval(updateClock, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   // Filter patients based on search
   const filteredPatients = searchQuery.trim()

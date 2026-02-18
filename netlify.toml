@@ -1,8 +1,11 @@
 [build]
-  command = "npm run build"
+  # Install with optional deps and then build so native rollup/tailwind binaries are present.
+  command = "npm ci --include=optional && npm run build"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_CONFIG_OPTIONAL = "true"
   NPM_FLAGS = "--include=optional"
+  # Force rollup to fall back to the WASM build if the native binary is missing.
+  ROLLUP_SKIP_NODE_JS_NATIVE_LIBS = "true"
