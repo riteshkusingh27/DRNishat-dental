@@ -14,16 +14,16 @@ import { Doctors } from './components/pages/Doctors';
 import { Treatments } from './components/pages/Treatments';
 import { Settings } from './components/pages/Settings';
 
-type PageType = 
-  | 'dashboard' 
-  | 'patients' 
+type PageType =
+  | 'dashboard'
+  | 'patients'
   | 'patient-profile'
-  | 'appointments' 
-  | 'billing' 
-  | 'followups' 
-  | 'reports' 
-  | 'doctors' 
-  | 'treatments' 
+  | 'appointments'
+  | 'billing'
+  | 'followups'
+  | 'reports'
+  | 'doctors'
+  | 'treatments'
   | 'settings';
 
 interface PageState {
@@ -34,10 +34,12 @@ interface PageState {
 export default function App() {
   const [currentPageState, setCurrentPageState] = useState<PageState>({ page: 'dashboard' });
   const [showAddPatient, setShowAddPatient] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleNavigate = (page: PageType, data?: any) => {
     setCurrentPageState({ page, data });
     setShowAddPatient(false);
+    setIsSidebarOpen(false);
   };
 
   const handlePatientSelect = (patientId: string) => {
@@ -59,15 +61,15 @@ export default function App() {
     switch (page) {
       case 'dashboard':
         return <Dashboard onNavigate={handleNavigate} />;
-      
+
       case 'patients':
         return (
-          <Patients 
-            onNavigate={handleNavigate} 
+          <Patients
+            onNavigate={handleNavigate}
             onAddPatient={handleAddPatient}
           />
         );
-      
+
       case 'patient-profile':
         return (
           <PatientProfile
@@ -76,67 +78,67 @@ export default function App() {
             onNavigate={handleNavigate}
           />
         );
-      
+
       case 'appointments':
         return <Appointments onNavigate={handleNavigate} />;
-      
+
       case 'billing':
         return (
-          <Billing 
+          <Billing
             onNavigate={handleNavigate}
             initialPatientId={data?.patientId}
           />
         );
-      
+
       case 'followups':
         return <FollowUps onNavigate={handleNavigate} />;
-      
+
       case 'reports':
         return <Reports />;
-      
+
       case 'doctors':
         return <Doctors />;
-      
+
       case 'treatments':
         return <Treatments />;
-      
+
       case 'settings':
         return <Settings />;
-      
+
       default:
         return <Dashboard onNavigate={handleNavigate} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Sidebar */}
-      <Sidebar 
-        currentPage={currentPageState.page} 
-        onNavigate={(page) => handleNavigate(page as PageType)} 
+    <div className="min-h-screen bg-gray-50 flex">
+      <Sidebar
+        currentPage={currentPageState.page}
+        onNavigate={(page) => handleNavigate(page as PageType)}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
 
-      {/* Main Content */}
-      <div className="ml-64">
-        {/* Header */}
-        <Header onPatientSelect={handlePatientSelect} />
+      <div className="flex-1 min-h-screen lg:ml-64">
+        <Header
+          onPatientSelect={handlePatientSelect}
+          onMenuToggle={() => setIsSidebarOpen((open) => !open)}
+          isSidebarOpen={isSidebarOpen}
+        />
 
-        {/* Page Content */}
-        <div className="pt-36">
+        <div className="pt-32 lg:pt-36 px-4 sm:px-6 lg:px-8 pb-10">
           {renderPage()}
         </div>
       </div>
 
-      {/* Add Patient Modal */}
       {showAddPatient && (
-        <AddPatient 
+        <AddPatient
           onClose={() => setShowAddPatient(false)}
           onSuccess={handleAddPatientSuccess}
         />
       )}
 
-      {/* Toast Notifications */}
-      <Toaster 
+      <Toaster
         position="top-right"
         richColors
         closeButton

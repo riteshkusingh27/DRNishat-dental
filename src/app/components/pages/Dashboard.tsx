@@ -20,7 +20,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   };
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="space-y-6">
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-semibold text-gray-900 mb-1">Dashboard</h1>
@@ -28,7 +28,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6">
         <StatCard
           title="Today's Appointments"
           value={todayAppointments}
@@ -63,9 +63,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Today's Appointments Table */}
-        <div className="col-span-2">
+        <div className="xl:col-span-2">
           <div className="bg-white rounded-xl border border-gray-200">
             <div className="p-6 border-b border-gray-200 flex items-center justify-between">
               <div>

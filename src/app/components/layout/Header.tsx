@@ -1,13 +1,15 @@
-import { Search, User } from 'lucide-react';
+import { Menu, Search, User, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { patients } from '../../data/mockData';
 import logo from '../../../assets/lg.png';
 
 interface HeaderProps {
   onPatientSelect?: (patientId: string) => void;
+  onMenuToggle?: () => void;
+  isSidebarOpen?: boolean;
 }
 
-export function Header({ onPatientSelect }: HeaderProps) {
+export function Header({ onPatientSelect, onMenuToggle, isSidebarOpen }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showResults, setShowResults] = useState(false);
   const [dateStr, setDateStr] = useState('');
@@ -58,12 +60,21 @@ export function Header({ onPatientSelect }: HeaderProps) {
   return (
     <>
       {/* Main Header */}
-      <div className="h-20 bg-white border-b border-gray-200 fixed top-0 left-64 right-0 z-40">
-        <div className="h-full px-6 flex items-center justify-between">
-          {/* Left - Date & Time */}
-          <div>
-            <p className="text-sm text-gray-600">{dateStr}</p>
-            <p className="text-xs text-gray-500">{timeStr}</p>
+      <div className="h-20 bg-white border-b border-gray-200 fixed top-0 left-0 right-0 lg:left-64 z-40 shadow-sm">
+        <div className="h-full px-4 sm:px-6 flex items-center justify-between gap-4">
+          {/* Left - menu + Date & Time */}
+          <div className="flex items-center gap-3">
+            <button
+              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 text-gray-700 shadow-sm"
+              onClick={onMenuToggle}
+              aria-label="Toggle navigation"
+            >
+              {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+            <div>
+              <p className="text-sm text-gray-600">{dateStr}</p>
+              <p className="text-xs text-gray-500">{timeStr}</p>
+            </div>
           </div>
 
           {/* Center - Clinic Logo */}
@@ -89,8 +100,8 @@ export function Header({ onPatientSelect }: HeaderProps) {
       </div>
 
       {/* Search Bar Below Header */}
-      <div className="fixed top-20 left-64 right-0 bg-white border-b border-gray-200 z-30 px-6 py-4">
-        <div className="max-w-2xl mx-auto relative">
+      <div className="fixed top-20 left-0 right-0 lg:left-64 bg-white border-b border-gray-200 z-30 px-4 sm:px-6 py-3 shadow-sm">
+        <div className="max-w-3xl mx-auto relative">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -109,7 +120,7 @@ export function Header({ onPatientSelect }: HeaderProps) {
 
           {/* Search Results Dropdown */}
           {showResults && filteredPatients.length > 0 && (
-            <div className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto">
+            <div className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-y-auto">
               {filteredPatients.map((patient) => (
                 <button
                   key={patient.id}
